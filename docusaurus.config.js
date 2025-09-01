@@ -48,7 +48,7 @@ presets: [
           type: ['rss', 'atom'],
           xslt: true,
         },
-        editUrl: 'https://github.com/zyhgov/rsjk/edit/main/blog/', // ✅ 已修正
+        editUrl: 'https://github.com/zyhgov/rsjk/edit/main/', // ✅ 已修正
         onInlineTags: 'warn',
         onInlineAuthors: 'warn',
         onUntruncatedBlogPosts: 'warn',
@@ -68,7 +68,7 @@ plugins: [
       path: 'docs',
       routeBasePath: 'docs',
       sidebarPath: './sidebars.js',
-      editUrl: 'https://github.com/zyhgov/rsjk/edit/main/docs/', // ✅ 已修正
+      editUrl: 'https://github.com/zyhgov/rsjk/edit/main/', // ✅ 已修正
     },
   ],
   [
@@ -78,7 +78,7 @@ plugins: [
       path: 'docs-private',
       routeBasePath: 'private',
       sidebarPath: './sidebars-private.js',
-      editUrl: 'https://github.com/zyhgov/rsjk/edit/main/docs-private/', // ✅ 已修正
+      editUrl: 'https://github.com/zyhgov/rsjk/edit/main/', // ✅ 已修正
     },
   ],
 ],
