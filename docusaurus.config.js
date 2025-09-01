@@ -138,7 +138,7 @@ plugins: [
             },
             {
               label: '内部参考',
-              to: '/docs-private/internal-guide',
+              to: '/private/internal-guide',
             },
             
           ],
