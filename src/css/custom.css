@@ -1,0 +1,233 @@
+/* 使用 MiSans-Semibold 替代原 PingFang SC 的 Semibold 和 Medium */
+@font-face {
+  font-family: 'MiSans';
+  src: url('/fonts/MiSans-Semibold.woff2') format('woff2'),
+       url('/fonts/MiSans-Semibold.woff') format('woff'),
+       url('/fonts/MiSans-Semibold.ttf') format('truetype');
+  font-weight: 500; /* 用于 Medium 级别 */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'MiSans';
+  src: url('/fonts/MiSans-Semibold.woff2') format('woff2'),
+       url('/fonts/MiSans-Semibold.woff') format('woff'),
+       url('/fonts/MiSans-Semibold.ttf') format('truetype');
+  font-weight: 600; /* 用于 Semibold */
+  font-style: normal;
+}
+
+
+/* 可选：如果你还想引入常规和轻体，可以后续添加 MiSans-Regular 等 */
+/* 全局设置所有文本使用 PingFang SC */
+html {
+  font-family: 'MiSans';
+}
+
+/* 可选：更精确控制不同元素 */
+body,
+button,
+input,
+textarea,
+select {
+  font-family: 'MiSans';
+}
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+/* 浅色模式 - 黄色/橙黄主题 */
+:root {
+  --ifm-color-primary: #f6821f;
+  --ifm-color-primary-dark: #e67817;
+  --ifm-color-primary-darker: #d66a10;
+  --ifm-color-primary-darkest: #c65c08;
+  --ifm-color-primary-light: #fbad41;
+  --ifm-color-primary-lighter: #fdba50;
+  --ifm-color-primary-lightest: #ffe0b2;
+
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(246, 130, 31, 0.1);
+}
+
+/* 深色模式 - 协调的亮黄色 */
+[data-theme='dark'] {
+  --ifm-color-primary: #ff9800;
+  --ifm-color-primary-dark: #f57c00;
+  --ifm-color-primary-darker: #ef6c00;
+  --ifm-color-primary-darkest: #d84315;
+  --ifm-color-primary-light: #ffb74d;
+  --ifm-color-primary-lighter: #ffcc80;
+  --ifm-color-primary-lightest: #ffecb3;
+
+  --docusaurus-highlighted-code-line-bg: rgba(255, 152, 0, 0.2);
+}
+
+/* src/css/custom.css */
+
+/* 代码块整体样式 */
+pre {
+  font-family: 'MiSans'; /* 注意顺序 */
+  font-size: 14px;
+  letter-spacing: 0.8px;
+  line-height: 1.6;
+  background-color: #f8f9fa !important;
+  border: 1px solid #dee2e6;
+  border-radius: 10px;
+  /* padding: 16px; */
+  /* margin: 1.5em 0; */
+  overflow-x: auto;
+}
+
+[data-theme='dark'] pre {
+  background-color: #1e1e1e !important;
+  border-color: #333;
+  color: #ddd;
+}
+
+/* 行号和高亮行 */
+.docusaurus-highlight-code-line {
+  background-color: rgba(255, 229, 100, 0.2);
+  /* margin: 0 -16px; */
+  /* padding: 0 16px; */
+  display: block;
+}
+
+[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(255, 229, 100, 0.15);
+}
+
+/* 导航栏标题文字样式 */
+.navbar__title {
+  font-family: 'MiSans' !important;
+  font-size: 1.4rem !important;       /* 更大一些 */
+  font-weight: 600 !important;        /* 稍微加粗 */
+  color: #1d1d1f !important;          /* 橙色（可换成你喜欢的颜色） */
+  letter-spacing: 0.5px !important;   /* 字间距 */
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* 可选：轻微阴影 */
+}
+
+/* 深色模式下适配 */
+[data-theme='dark'] .navbar__title {
+  color: #f5f5f7 !important;          /* 深色模式用亮黄色 */
+}
+
+/* 侧边栏字体大小和悬停效果 */
+.menu {
+  font-size: 16px; /* 增大侧边栏字体大小 */
+}
+
+.menu__link {
+  font-size: inherit;
+  transition: all 0.2s ease-in-out; /* 添加平滑过渡效果 */
+  border-radius: 6px; /* 圆角边框 */
+  padding: 8px 12px; /* 增加内边距 */
+  margin: 4px 0; /* 增加外边距 */
+}
+
+.menu__link:hover {
+  font-size: 16px; /* 鼠标悬停时稍微增大字体 */
+  background-color: var(--ifm-color-primary-lightest); /* 使用主色调 */
+  color: var(--ifm-color-primary-dark); /* 文字颜色变化 */
+  /* transform: translateX(5px); 向右移动效果 */
+}
+
+/* 深色模式适配 */
+[data-theme='dark'] .menu__link:hover {
+  background-color: rgba(255, 152, 0, 0.15); /* 深色模式下的背景色 */
+  color: var(--ifm-color-primary-lighter); /* 文字颜色 */
+}
+
+/* 当前选中项样式 */
+.menu__link--active {
+  font-weight: 600; /* 加粗显示当前选中项 */
+  border-left: 4px solid var(--ifm-color-primary); /* 左侧边框标识 */
+}
+
+/* 顶部导航栏字体设置 */
+.navbar__item {
+  font-size: 16px; /* 增大导航项字体大小 */
+  font-weight: 500; /* 中等字重 */
+}
+
+.navbar__link {
+  /* transition: all 0.2s ease-in-out; 添加平滑过渡效果 */
+  border-radius: 12px; /* 圆角边框 */
+  padding: 6px 12px; /* 增加内边距 */
+  margin: 0 4px; /* 增加外边距 */
+}
+
+.navbar__link:hover {
+  font-size: 16px; /* 鼠标悬停时稍微增大字体 */
+  background-color: var(--ifm-color-primary-lightest); /* 使用主色调 */
+  color: var(--ifm-color-primary-dark); /* 文字颜色变化 */
+  /* transform: translateY(-2px); 向上移动效果 */
+}
+
+/* 深色模式适配 */
+[data-theme='dark'] .navbar__link:hover {
+  background-color: rgba(255, 152, 0, 0.15); /* 深色模式下的背景色 */
+  color: var(--ifm-color-primary-lighter); /* 文字颜色 */
+}
+/* 导航栏 Logo 样式 */
+.navbar__logo {
+  height: 36px !important; /* 设置 Logo 高度 */
+  width: auto !important; /* 宽度自适应 */
+  transform: scale(1.1); /* 放大 Logo */
+  transition: all 0.3s ease-in-out; /* 添加平滑过渡效果 */
+}
+
+/* 鼠标悬停效果 */
+.navbar__logo:hover {
+  transform: scale(1.2); /* 悬停时进一步放大 */
+  filter: brightness(1.1) drop-shadow(0 0 4px rgba(246, 130, 31, 0.5)); /* 增加亮度和阴影效果 */
+}
+
+/* 深色模式适配 */
+[data-theme='dark'] .navbar__logo:hover {
+  filter: brightness(1.2) drop-shadow(0 0 6px rgba(255, 152, 0, 0.7)); /* 深色模式下的效果 */
+}
+
+/* 确保 Logo 容器有足够空间 */
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Logo 和标题之间的间距 */
+}
+/* 导航栏切换按钮 */
+.navbar__toggle {
+  margin-right: 1rem;
+}
+
+/* 全局正文段落字体设置 */
+p {
+  font-family: 'MiSans';
+  font-size: 16px;        /* 比默认稍大一点 */
+  line-height: 1.8;       /* 提升行高，增强可读性 */
+  color: #1d1d1f; /* 使用主题颜色，适配浅/深色模式 */
+}
+[data-theme='dark'] p{
+  color: #f5f5f7;
+}
+/* 可选：调整小屏幕下的响应式字体大小 */
+@media (max-width: 768px) {
+  p {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+}
+
+/* 如果你希望强调文字（<em>）、加粗（<strong>）也使用 PingFang SC */
+/* em, strong, small, code {
+  font-family: 'MiSans';
+} */
+
+/* 可选：统一 Markdown 中的其他块级元素字体 */
+/* blockquote, ul, ol, li, dl, dt, dd {
+  font-family: 'MiSans';
+  font-size: 16px;
+  line-height: 1.8;
+} */
