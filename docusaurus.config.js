@@ -36,55 +36,52 @@ i18n: {
     '@docusaurus/theme-live-codeblock' // ✅ 只有你安装了才保留
   ],
 
-  presets: [
-    [
-      'classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
-      ({
-        docs: false,
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          editUrl: 'https://github.com/zyhgov/rsjk/edit/main/blog/', // ✅ 去掉空格
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
+presets: [
+  [
+    'classic',
+    /** @type {import('@docusaurus/preset-classic').Options} */
+    ({
+      docs: false,
+      blog: {
+        showReadingTime: true,
+        feedOptions: {
+          type: ['rss', 'atom'],
+          xslt: true,
         },
-        // ❌ 删除这里错误的 themes 配置
-        theme: {
-          customCss: './src/css/custom.css',
-          // themes: [...] ❌ 不要放在这里！
-        },
-      }),
-    ],
-  ],
-
-  plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'docs',
-        path: 'docs',
-        routeBasePath: 'docs',
-        sidebarPath: './sidebars.js',
-        editUrl: 'https://github.com/zyhgov/rsjk/edit/main/docs/', // ✅ 去掉空格
+        editUrl: 'https://github.com/zyhgov/rsjk/edit/main/blog/', // ✅ 已修正
+        onInlineTags: 'warn',
+        onInlineAuthors: 'warn',
+        onUntruncatedBlogPosts: 'warn',
       },
-    ],
-    [
-      '@docusaurus/plugin-content-docs',
-      {
-        id: 'private',
-        path: 'docs-private',
-        routeBasePath: 'private',
-        sidebarPath: './sidebars-private.js',
-        editUrl: 'https://github.com/zyhgov/rsjk/edit/main/docs-private/', // ✅ 去掉空格
+      theme: {
+        customCss: './src/css/custom.css',
       },
-    ],
+    }),
   ],
+],
 
+plugins: [
+  [
+    '@docusaurus/plugin-content-docs',
+    {
+      id: 'docs',
+      path: 'docs',
+      routeBasePath: 'docs',
+      sidebarPath: './sidebars.js',
+      editUrl: 'https://github.com/zyhgov/rsjk/edit/main/docs/', // ✅ 已修正
+    },
+  ],
+  [
+    '@docusaurus/plugin-content-docs',
+    {
+      id: 'private',
+      path: 'docs-private',
+      routeBasePath: 'private',
+      sidebarPath: './sidebars-private.js',
+      editUrl: 'https://github.com/zyhgov/rsjk/edit/main/docs-private/', // ✅ 已修正
+    },
+  ],
+],
   themeConfig: {
     image: 'img/bg.jpg',
     navbar: {
