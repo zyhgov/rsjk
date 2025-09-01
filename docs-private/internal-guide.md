@@ -8,6 +8,9 @@ keywords:
   - 受保护内容
   - 团队专用
 ---
+import AccessWarning from '@site/src/components/AccessWarning';
+
+<AccessWarning />
 
 # 内部参考文档（内参）
 

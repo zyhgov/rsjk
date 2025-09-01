@@ -1,5 +1,6 @@
 const sidebars = {
   private: [ // ← 关键修改：ID 必须与 plugin 的 id 一致
+    'index',
     'internal-guide',
     {
       type: 'category',
