@@ -262,8 +262,9 @@ plugins: [
 
       // 可选：替换 Algolia 的部分网址。 在使用相同搜索索引支持多个不同 baseUrl 的部署时非常有用。 你可以在 “from” 中使用正则表达式或字符串。 比方说，localhost:3000 和 myCompany.com/docs
       replaceSearchResultPathname: {
-        from: '/docs/',   // 只替换 /docs/ 下的内容
-        to: '/',           // 其他路径（如 /private/）保持不变
+        // 匹配所有不在 /docs/ 下但应该是的路径
+        from: '^/(?!(docs|private|blog|search)/)([^/]+)$',
+        to: '/docs/$2',
       },
 
       // 可选：Algolia 搜索参数
