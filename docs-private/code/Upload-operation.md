@@ -7,12 +7,12 @@ keywords: [代码, Git, GitHub]
 ---
 
 
-当然可以！以下是一份 **完整、详细、图文结合风格的 Git 上传到 GitHub 操作手册**，适用于你将本地项目（如 Docusaurus 项目）推送到 `https://github.com/zyhgov/rsjk` 的全过程。
+当然可以！以下是一份 **完整、详细、图文结合风格的 Git 上传到 GitHub 操作手册**，适用于你将本地项目（如 Docusaurus 项目）推送到 `https://github.com/XXXXX/XXXXX` 的全过程。
 
 ---
 
 # 📚 Git 上传到 GitHub 完整操作手册  
-> **目标仓库：** [https://github.com/zyhgov/rsjk](https://github.com/zyhgov/rsjk)  
+> **目标仓库：** [https://github.com/XXXXX/XXXXX](https://github.com/XXXXX/XXXXX)  
 > **适用系统：** Windows / macOS / Linux  
 > **工具要求：** Git 已安装、GitHub 账号
 
@@ -119,7 +119,7 @@ git commit -m "feat: 初始化项目，首次提交"
 ### 方法一：HTTPS（推荐新手）
 
 ```bash
-git remote add origin https://github.com/zyhgov/rsjk.git
+git remote add origin https://github.com/XXXXX/XXXXX.git
 ```
 
 ### 方法二：SSH（需配置密钥）
@@ -137,8 +137,8 @@ git remote -v
 输出应为：
 
 ```
-origin  https://github.com/zyhgov/rsjk.git (fetch)
-origin  https://github.com/zyhgov/rsjk.git (push)
+origin  https://github.com/XXXXX/XXXXX.git (fetch)
+origin  https://github.com/XXXXX/XXXXX.git (push)
 ```
 
 ---
@@ -200,7 +200,7 @@ git push
 
 ```bash
 git remote remove origin
-git remote add origin https://github.com/zyhgov/rsjk.git
+git remote add origin https://github.com/XXXXX/XXXXX.git
 ```
 
 ---
@@ -244,7 +244,7 @@ git pull origin main --allow-unrelated-histories
 ### ❌ 问题 4：如何修改远程仓库地址？
 
 ```bash
-git remote set-url origin https://github.com/zyhgov/rsjk.git
+git remote set-url origin https://github.com/XXXXX/XXXXX.git
 ```
 
 ---
@@ -276,7 +276,7 @@ git push
 ## 🎉 恭喜！你已完成上传
 
 现在访问：
-👉 [https://github.com/zyhgov/rsjk](https://github.com/zyhgov/rsjk)
+👉 [https://github.com/XXXXX/XXXXX](https://github.com/XXXXX/XXXXX)
 
 就能看到你的项目代码了！
 
