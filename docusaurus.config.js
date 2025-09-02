@@ -22,7 +22,7 @@ const config = {
 
 i18n: {
   defaultLocale: 'zh-Hans',
-  locales: ['zh-Hans','en'], 
+  locales: ['zh-Hans','zh-Hant', 'en',  'ja', 'ko' ,'ru'], 
 },
 
   // ✅ 1. 启用 Mermaid 解析支持
