@@ -22,7 +22,7 @@ const config = {
 
 i18n: {
   defaultLocale: 'zh-Hans',
-  locales: ['zh-Hans','zh-Hant', 'en',  'ja', 'ko' ,'ru'], 
+  locales: ['zh-Hans','en'], 
 },
 
   // ✅ 1. 启用 Mermaid 解析支持
@@ -251,8 +251,8 @@ plugins: [
 
       //  公开 API 密钥：提交它没有危险
       apiKey: 'bc9ffcc14c05413ef7f532053a48d66a',
-
-      indexName: 'rsjk_zyhgov_cn_spm1vvuqfu_pages',
+      indexName: 'rsjk_docsruoshan-docs',
+      // indexName: 'rsjk_zyhgov_cn_spm1vvuqfu_pages',
 
       // 可选：见下文
       contextualSearch: true,
