@@ -142,7 +142,76 @@ plugins: [
   ],
 ],
   themeConfig: {
-    image: 'img/bg.jpg',
+  image: 'img/bg.jpg',
+  metadata: [
+    // 🔍 页面关键词（SEO）
+    { name: 'keywords', content: '若善云, 若善文档, 云系统, 运维手册, 操作教程, 企业内参, 技术文档' },
+    // 🐦 Twitter 卡片
+    { name: 'twitter:card', content: 'summary_large_image' },
+    { name: 'twitter:title', content: '若善文档 - 若善云系统平台运维操作手册' },
+    { name: 'twitter:description', content: '若善云系统平台官方教程网站，提供全面的系统使用指南、操作教程和最佳实践。' },
+    { name: 'twitter:image', content: 'https://rsjk.zyhgov.cn/img/bg.jpg' },
+    // 🌐 Open Graph（用于微信、Facebook 等社交分享）
+    { name: 'og:title', content: '若善文档 - 若善云系统平台运维操作手册' },
+    { name: 'og:description', content: '若善云系统平台官方教程网站，提供全面的系统使用指南、操作教程和最佳实践。' },
+    { name: 'og:image', content: 'https://rsjk.zyhgov.cn/img/bg.jpg' },
+    { name: 'og:url', content: 'https://rsjk.zyhgov.cn' },
+    { name: 'og:type', content: 'website' },
+  ],
+  headTags: [
+    // 🔗 预连接到关键域名（提升加载速度）
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://rsjk.zyhgov.cn',
+      },
+    },
+    {
+      tagName: 'link',
+      attributes: {
+        rel: 'preconnect',
+        href: 'https://rsc.rsjk.org.cn',
+      },
+    },
+    // 🧩 结构化数据：Organization（帮助搜索引擎理解你的网站）
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'application/ld+json',
+      },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: '若善健康',
+        url: 'https://rsjk.zyhgov.cn',
+        logo: 'https://rsjk.zyhgov.cn/img/logo.svg',
+        description: '若善云系统平台运维工作人员操作手册与一般性笔记文档网站。',
+        sameAs: [
+          'https://github.com/zyhgov',
+          'https://govhub.zyhgov.cn'
+        ]
+      }),
+    },
+    // 📚 可选：为首页添加 WebSite 结构化数据
+    {
+      tagName: 'script',
+      attributes: {
+        type: 'application/ld+json',
+      },
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: '若善文档',
+        url: 'https://rsjk.zyhgov.cn',
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: 'https://rsjk.zyhgov.cn/search?q={search_term_string}',
+          'query-input': 'required name=search_term_string'
+        }
+      }),
+    },
+  ],
     navbar: {
       title: '若善文档',
       logo: {
