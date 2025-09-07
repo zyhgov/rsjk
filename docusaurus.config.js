@@ -406,18 +406,26 @@ window.turnstile.render('#turnstile-container', {
               label: 'info@zyhorg.cn',
               href: 'mailto:info@zyhorg.cn',
             },
-            {
-              label: 'GitHub',
-              href: 'https://github.com/zyhgov', // ✅ 去掉空格
-            },
-            // {
-            //   label: 'zyhorg',
-            //   href: 'https://zyhorg.cn', // ✅ 去掉空格
-            // },
-            {
-              label: 'GovHub',
-              href: 'https://govhub.zyhgov.cn', // ✅ 去掉空格
-            },
+    {
+      html: `
+        <div style="display: flex; align-items: center; justify-content: center; width: 120px; gap: 8px; white-space: nowrap;">
+          <a href="https://github.com/zyhgov" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
+            <img src="/img/logos/github.svg" alt="Docusaurus Logo" height="23" style="vertical-align: middle;" />
+            <span>GitHub</span>
+          </a>
+        </div>
+      `
+    },
+    {
+      html: `
+        <div style="display: flex; align-items: center; justify-content: center; width: 120px; gap: 8px; white-space: nowrap;">
+          <a href="https://zyhgov.cn/" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
+            <img src="/img/logos/national-emblem.png" alt="Docusaurus Logo" height="23" style="vertical-align: middle;" />
+            <span>zyhgov</span>
+          </a>
+        </div>
+      `
+    },
           ],
         },
 {
@@ -446,9 +454,9 @@ window.turnstile.render('#turnstile-container', {
     {
       html: `
         <div style="display: flex; align-items: center; justify-content: center; width: 120px; gap: 8px; white-space: nowrap;">
-          <a href="https://www.cloudflare-cn.com/zero-trust/" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
+          <a href="https://www.cloudflare-cn.com/application-services/products/turnstile/" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
             <img src="/img/logos/cloudflare-zero-trust.svg" alt="Cloudflare Logo" height="25" style="vertical-align: middle;" />
-            <span>Cloudflare Zero Trust</span>
+            <span>Turnstile</span>
           </a>
         </div>
       `
@@ -478,7 +486,7 @@ window.turnstile.render('#turnstile-container', {
         <div style="display: flex; align-items: center; justify-content: center; width: 120px; gap: 8px; white-space: nowrap;">
           <a href="https://echarts.apache.org/" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
             <img src="/img/logos/ECharts.svg" alt="ECharts Logo" height="20" style="vertical-align: middle;" />
-            <span>Apache ECharts</span>
+            <span>ECharts</span>
           </a>
         </div>
       `
