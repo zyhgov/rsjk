@@ -61,6 +61,121 @@ presets: [
 ],
 
 plugins: [
+    // ✅ 1. 添加全站 Turnstile 验证插件
+  () => ({
+    name: 'docusaurus-plugin-sitewide-turnstile',
+    injectHtmlTags() {
+      return {
+        headTags: [
+          // ✅ 1.1 引入 Cloudflare Turnstile 的 JavaScript SDK
+          {
+            tagName: 'script',
+            attributes: {
+              src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad',
+              async: true,
+            },
+          },
+          // ✅ 1.2 注入核心验证逻辑
+          {
+            tagName: 'script',
+            innerHTML: `
+              // 定义一个函数，用于设置“已验证”Cookie
+              function setVerifiedCookie() {
+                const d = new Date();
+                d.setTime(d.getTime() + (24 * 60 * 60 * 1000)); // Cookie 有效期为 24 小时
+                let expires = "expires=" + d.toUTCString();
+                document.cookie = "turnstile_verified=true; " + expires + "; path=/";
+              }
+
+              // 定义一个函数，用于检查“已验证”Cookie
+              function isVerified() {
+                let name = "turnstile_verified=";
+                let decodedCookie = decodeURIComponent(document.cookie);
+                let ca = decodedCookie.split(';');
+                for(let i = 0; i < ca.length; i++) {
+                  let c = ca[i];
+                  while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                  }
+                  if (c.indexOf(name) == 0) {
+                    return true;
+                  }
+                }
+                return false;
+              }
+
+              // 当 Turnstile SDK 加载完成后执行
+              function onTurnstileLoad() {
+                // 🔥 新增：检查是否为本地开发环境
+              if (window.location.hostname === 'localhost') {
+                console.log('Running in development mode. Turnstile verification is disabled.');
+                return; // 直接返回，不执行后续的验证逻辑
+              }
+                // 🔥 关键：替换下面的 'YOUR_SITE_KEY' 为你从 Cloudflare 复制的实际 Site Key
+                const siteKey = '0x4AAAAAABzxmZ5cp7bwL3PZ'; // 👈 请替换成你的 Site Key！
+
+                // 如果用户已经验证过，直接放行
+                if (isVerified()) {
+                  return;
+                }
+
+// 创建一个覆盖全屏的遮罩层
+const overlay = document.createElement('div');
+overlay.id = 'turnstile-overlay';
+overlay.style.position = 'fixed';
+overlay.style.top = '0';
+overlay.style.left = '0';
+overlay.style.width = '100%';
+overlay.style.height = '100%';
+overlay.style.backgroundColor = 'rgba(128, 128, 128, 0.6)'; // 灰色半透明背景
+overlay.style.backdropFilter = 'blur(8px)'; // 高斯模糊效果
+overlay.style.zIndex = '99999';
+overlay.style.display = 'flex';
+overlay.style.justifyContent = 'center';
+overlay.style.alignItems = 'center';
+overlay.style.overflow = 'hidden'; // 防止内容溢出
+
+// ✅ 新增：禁用页面滚动
+document.body.style.overflow = 'hidden';
+document.body.style.touchAction = 'none'; // 禁用触摸滚动
+
+document.body.appendChild(overlay);
+
+// 创建一个容器来承载 Turnstile 组件
+const turnstileContainer = document.createElement('div');
+turnstileContainer.id = 'turnstile-container';
+// ✅ 新增：给容器添加缩放样式，让内部的 Turnstile 组件变大
+turnstileContainer.style.transform = 'scale(1.2)'; // 放大 1.2 倍
+turnstileContainer.style.transformOrigin = 'center'; // 以中心点缩放
+overlay.appendChild(turnstileContainer);
+
+// 渲染 Turnstile 组件
+window.turnstile.render('#turnstile-container', {
+  sitekey: siteKey,
+  callback: function(token) {
+    // 验证通过后，设置 Cookie 并移除遮罩层
+    setVerifiedCookie();
+    overlay.remove();
+    // ✅ 新增：恢复页面滚动
+    document.body.style.overflow = '';
+    document.body.style.touchAction = '';
+  },
+  'error-callback': function(error) {
+    console.error('Turnstile Error:', error);
+    alert('验证失败，无效域，请刷新页面重试。');
+    // ✅ 新增：在错误时也恢复滚动，避免页面被永久锁定
+    document.body.style.overflow = '';
+    document.body.style.touchAction = '';
+  }
+});
+              }
+            `,
+          },
+        ],
+      };
+    },
+  }),
+
     // ✅ 新增：全局注入脚本，强制弹窗警告
     () => ({
   name: 'docusaurus-plugin-alert-private-access',
@@ -268,11 +383,14 @@ plugins: [
               label: '内部参考',
               to: '/private/internal-guide',
             },
-            
+            {
+              label: '日志更新',
+              to: '/blog',
+            },
           ],
         },
         {
-          title: '系统链接',
+          title: '若善云系统',
           items: [
             {
               label: '若善云',
@@ -281,11 +399,12 @@ plugins: [
           ],
         },
         {
-          title: '更多',
+          title: '关注与联系',
           items: [
+
             {
-              label: '日志更新',
-              to: '/blog',
+              label: 'info@zyhorg.cn',
+              href: 'mailto:info@zyhorg.cn',
             },
             {
               label: 'GitHub',
@@ -301,6 +420,71 @@ plugins: [
             },
           ],
         },
+{
+  title: '技术驱动支持',
+  items: [
+    {
+      html: `
+        <div style="display: flex; align-items: center; justify-content: center; width: 120px; gap: 8px; white-space: nowrap;">
+          <a href="https://docusaurus.io/" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
+            <img src="/img/logos/docusaurus.svg" alt="Docusaurus Logo" height="23" style="vertical-align: middle;" />
+            <span>Docusaurus</span>
+          </a>
+        </div>
+      `
+    },
+    {
+      html: `
+        <div style="display: flex; align-items: center; justify-content: center; width: 120px; gap: 8px; white-space: nowrap;">
+          <a href="https://www.cloudflare.com/" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
+            <img src="/img/logos/cloudflare.svg" alt="Cloudflare Logo" height="15" style="vertical-align: middle;" />
+            <span>Cloudflare</span>
+          </a>
+        </div>
+      `
+    },
+    {
+      html: `
+        <div style="display: flex; align-items: center; justify-content: center; width: 120px; gap: 8px; white-space: nowrap;">
+          <a href="https://www.cloudflare-cn.com/zero-trust/" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
+            <img src="/img/logos/cloudflare-zero-trust.svg" alt="Cloudflare Logo" height="25" style="vertical-align: middle;" />
+            <span>Cloudflare Zero Trust</span>
+          </a>
+        </div>
+      `
+    },
+    {
+      html: `
+        <div style="display: flex; align-items: center; justify-content: center; width: 120px; gap: 8px; white-space: nowrap;">
+          <a href="https://www.algolia.com/" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
+            <img src="/img/logos/algolia.svg" alt="Algolia Logo" height="20" style="vertical-align: middle;" />
+            <span>Algolia</span>
+          </a>
+        </div>
+      `
+    },
+    {
+      html: `
+        <div style="display: flex; align-items: center; justify-content: center; width: 120px; gap: 8px; white-space: nowrap;">
+          <a href="https://react.dev/" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
+            <img src="/img/logos/react.svg" alt="React Logo" height="23" style="vertical-align: middle;" />
+            <span>React</span>
+          </a>
+        </div>
+      `
+    },
+    {
+      html: `
+        <div style="display: flex; align-items: center; justify-content: center; width: 120px; gap: 8px; white-space: nowrap;">
+          <a href="https://echarts.apache.org/" style="display: flex; align-items: center; gap: 8px; color: inherit; text-decoration: none;">
+            <img src="/img/logos/ECharts.svg" alt="ECharts Logo" height="20" style="vertical-align: middle;" />
+            <span>Apache ECharts</span>
+          </a>
+        </div>
+      `
+    }
+  ]
+}
       ],
       copyright: `Copyright &copy; ${new Date().getFullYear()} RuoShan Health, Group. All rights reserved.`,
     },
