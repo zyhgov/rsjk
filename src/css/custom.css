@@ -271,3 +271,196 @@ p {
     var(--ifm-color-emphasis-100) 100%
   );
 }
+
+
+/* =============== 全局自定义鼠标指针系统 =============== */
+
+/**
+ * 注意事项：
+ * - 所有 cursor URL 使用相对路径 /img/cursors/xxx.svg
+ * - 热区坐标设为 16 16，适用于 32x32 或 24x24 的 SVG 图标
+ * - 备选光标（如 default, pointer）确保降级体验
+ * - 使用 :not() 防止覆盖特殊状态
+ * - 利用 CSS 变量统一管理，便于主题切换或动态控制
+ */
+
+:root {
+  --cursor-hotspot-x: 0;  /* ← 改为 0 */
+  --cursor-hotspot-y: 0;  /* ← 改为 0 */
+
+  --cursor-default: url(/img/cursors/normal-selection.svg) var(--cursor-hotspot-x) var(--cursor-hotspot-y), default;
+  --cursor-text:    url(/img/cursors/text-selection.svg) 16 16, text;     /* 其他保持 16 16 */
+  --cursor-pointer: url(/img/cursors/hand-shape-selection.svg) 16 16, pointer;
+  --cursor-link:    url(/img/cursors/link-selection.svg) 16 16, pointer;
+  --cursor-move:    url(/img/cursors/hand-shape-selection.svg) 16 16, move;
+}
+
+/* =============== 基础重置 =============== */
+
+/* 全局默认光标 */
+* {
+  cursor: var(--cursor-default);
+}
+
+/* 移除用户选择干扰（可选：提升体验） */
+*::selection {
+  background-color: #a6cfff;
+  color: #000;
+}
+
+/* =============== 可点击元素 =============== */
+
+/* 通用可点击控件 */
+a,
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+select,
+details > summary,
+.dropdown,
+.navbar-item,
+.menu-item,
+.toggle,
+.copy-code-button,
+.pagination-nav__link,
+.plugin-wrapper a,
+.footer__link,
+.breadcrumb__item-link {
+  cursor: var(--cursor-pointer);
+}
+
+/* 外部链接、内部路由、锚点链接使用 link-selection 样式（可选区分） */
+a[href^="http"]:not(.button):not(.btn),
+a[href^="/"]:not(.button):not(.btn),
+a[href^="#"]:not([href="#"]) {
+  cursor: var(--cursor-link);
+}
+
+/* 表单中非文本类输入框保持 pointer */
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"] {
+  cursor: var(--cursor-pointer);
+}
+
+/* =============== 文本与可选中区域 =============== */
+
+/* 所有段落、列表、表格文本等使用 text 光标 */
+p,
+li,
+td,
+th,
+blockquote,
+pre,
+code,
+kbd,
+samp,
+.markdown p,
+.markdown li,
+.markdown blockquote,
+.markdown td,
+.markdown th,
+.content p,
+.content li,
+.copy-code-button span,
+.admonition p,
+.admonition li {
+  cursor: var(--cursor-text);
+}
+
+/* 文本输入区域 */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="tel"],
+input[type="url"],
+input[type="password"],
+textarea {
+  cursor: var(--cursor-text);
+}
+
+/* 防止 code 内点击变成 text 光标（如果希望保持 default，可取消上一条） */
+code,
+kbd,
+samp,
+pre code {
+  cursor: var(--cursor-default); /* 代码通常不需要 text 光标 */
+}
+
+/* =============== 特殊交互状态 =============== */
+
+/* 拖拽元素 */
+.draggable,
+[draggable="true"],
+.react-sortable-handle {
+  cursor: var(--cursor-move);
+}
+
+/* 禁用状态统一处理 */
+[disabled],
+button:disabled,
+input:disabled,
+select:disabled,
+.navbar-item.disabled,
+.button-disabled,
+.dropdown-item.disabled,
+.plugin-wrapper .disabled {
+  cursor: var(--cursor-not-allowed) !important;
+}
+
+/* 加载中或等待状态（可配合 JS 使用） */
+.wait,
+.progress,
+.loading,
+.is-loading {
+  cursor: wait !important;
+}
+
+/* =============== 白名单恢复默认（避免过度覆盖） =============== */
+
+/* 导航栏、页脚、键盘标签等保持简洁 */
+.navbar,
+.navbar__inner,
+.navbar-sidebar,
+.footer,
+.footer__copyright,
+.breadcrumb,
+.breadcrumb__item,
+.breadcrumb__item--active,
+.kbd,
+kbd,
+code,
+pre,
+.copy-button,
+.announcement-bar,
+.menu,
+.menu__list,
+.menu__link {
+  cursor: var(--cursor-default) !important;
+}
+
+/* 强制恢复默认的辅助类 */
+.cursor-default { cursor: var(--cursor-default) !important; }
+.cursor-pointer { cursor: var(--cursor-pointer) !important; }
+.cursor-link    { cursor: var(--cursor-link) !important; }
+.cursor-text    { cursor: var(--cursor-text) !important; }
+.cursor-move    { cursor: var(--cursor-move) !important; }
+.cursor-not-allowed { cursor: var(--cursor-not-allowed) !important; }
+
+/* =============== 兼容性兜底 =============== */
+
+/* 防止某些浏览器因 SVG 加载失败导致光标异常 */
+/* 如果 SVG 不存在或加载失败，至少保留语义化光标 */
+
+/* 可选：添加 data-cursor-ready 类由 JS 控制，实现更安全加载（进阶） */
+
+/* =============== 开发调试建议 =============== */
+/* 开发时可临时启用边框辅助调试 */
+/*
+a, button, input, textarea, p, li {
+  outline: 1px solid rgba(255,0,0,.3);
+}
+*/
