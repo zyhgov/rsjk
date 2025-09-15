@@ -62,119 +62,201 @@ presets: [
 
 plugins: [
     // ✅ 1. 添加全站 Turnstile 验证插件
-  () => ({
-    name: 'docusaurus-plugin-sitewide-turnstile',
-    injectHtmlTags() {
-      return {
-        headTags: [
-          // ✅ 1.1 引入 Cloudflare Turnstile 的 JavaScript SDK
-          {
-            tagName: 'script',
-            attributes: {
-              src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad',
-              async: true,
-            },
+// ✅ 优化版：带 Logo、白底、多错误提示的 Turnstile 全站验证插件
+() => ({
+  name: 'docusaurus-plugin-sitewide-turnstile',
+  injectHtmlTags() {
+    return {
+      headTags: [
+        // 引入 Cloudflare Turnstile SDK
+        {
+          tagName: 'script',
+          attributes: {
+            src: 'https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad',
+            async: true,
           },
-          // ✅ 1.2 注入核心验证逻辑
-          {
-            tagName: 'script',
-            innerHTML: `
-              // 定义一个函数，用于设置“已验证”Cookie
-              function setVerifiedCookie() {
-                const d = new Date();
-                d.setTime(d.getTime() + (24 * 60 * 60 * 1000)); // Cookie 有效期为 24 小时
-                let expires = "expires=" + d.toUTCString();
-                document.cookie = "turnstile_verified=true; " + expires + "; path=/";
-              }
+        },
 
-              // 定义一个函数，用于检查“已验证”Cookie
-              function isVerified() {
-                let name = "turnstile_verified=";
-                let decodedCookie = decodeURIComponent(document.cookie);
-                let ca = decodedCookie.split(';');
-                for(let i = 0; i < ca.length; i++) {
-                  let c = ca[i];
-                  while (c.charAt(0) == ' ') {
-                    c = c.substring(1);
-                  }
-                  if (c.indexOf(name) == 0) {
-                    return true;
-                  }
+        // 注入核心验证逻辑（优化版）
+        {
+          tagName: 'script',
+          innerHTML: `
+            // 设置已验证 Cookie（24 小时有效）
+            function setVerifiedCookie() {
+              const d = new Date();
+              d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
+              document.cookie = "turnstile_verified=true; expires=" + d.toUTCString() + "; path=/";
+            }
+
+            // 检查是否已验证
+            function isVerified() {
+              const name = "turnstile_verified=";
+              const decodedCookie = decodeURIComponent(document.cookie);
+              const ca = decodedCookie.split(';');
+              for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(name) === 0) {
+                  return true;
                 }
-                return false;
               }
+              return false;
+            }
 
-              // 当 Turnstile SDK 加载完成后执行
-              function onTurnstileLoad() {
-                // 🔥 新增：检查是否为本地开发环境
+            // 当 Turnstile SDK 加载完成后执行
+            function onTurnstileLoad() {
+              // 开发环境跳过验证
               if (window.location.hostname === 'localhost') {
-                console.log('Running in development mode. Turnstile verification is disabled.');
-                return; // 直接返回，不执行后续的验证逻辑
+                console.log('✅ Running in development mode. Turnstile verification is disabled.');
+                return;
               }
-                // 🔥 关键：替换下面的 'YOUR_SITE_KEY' 为你从 Cloudflare 复制的实际 Site Key
-                const siteKey = '0x4AAAAAABzxmZ5cp7bwL3PZ'; // 👈 请替换成你的 Site Key！
 
-                // 如果用户已经验证过，直接放行
-                if (isVerified()) {
-                  return;
+              // 如果已验证，直接退出
+              if (isVerified()) {
+                return;
+              }
+
+              // 创建全屏遮罩层（白色背景，无模糊）
+              const overlay = document.createElement('div');
+              overlay.id = 'turnstile-overlay';
+              overlay.style.position = 'fixed';
+              overlay.style.top = '0';
+              overlay.style.left = '0';
+              overlay.style.width = '100%';
+              overlay.style.height = '100%';
+              overlay.style.backgroundColor = 'white'; // ✅ 改为纯白背景
+              overlay.style.zIndex = '99999';
+              overlay.style.display = 'flex';
+              overlay.style.justifyContent = 'center';
+              overlay.style.alignItems = 'center';
+              overlay.style.flexDirection = 'column'; // 垂直排列 Logo 和 Turnstile
+              overlay.style.gap = '24px'; // Logo 和 Turnstile 间距
+              overlay.style.padding = '20px';
+
+              // 禁用页面滚动
+              document.body.style.overflow = 'hidden';
+              document.body.style.touchAction = 'none';
+
+              // 创建 Logo 容器（居中显示）
+              const logoContainer = document.createElement('div');
+              logoContainer.style.display = 'flex';
+              logoContainer.style.justifyContent = 'center';
+              logoContainer.style.alignItems = 'center';
+              logoContainer.style.marginBottom = '16px';
+
+              const logoImg = document.createElement('img');
+              logoImg.src = 'https://rsjk.zyhgov.cn/img/logo.svg'; // ✅ 使用你的 Logo
+              logoImg.alt = '若善健康 Logo';
+              logoImg.style.height = '80px'; // 可调整大小
+              logoImg.style.objectFit = 'contain';
+
+              logoContainer.appendChild(logoImg);
+              overlay.appendChild(logoContainer);
+
+              // 创建 Turnstile 容器（居中）
+              const turnstileContainer = document.createElement('div');
+              turnstileContainer.id = 'turnstile-container';
+              turnstileContainer.style.transform = 'scale(1.2)'; // 放大 1.2 倍
+              turnstileContainer.style.transformOrigin = 'center';
+              overlay.appendChild(turnstileContainer);
+
+              // 添加加载提示文本
+              const loadingText = document.createElement('div');
+              loadingText.style.color = '#333';
+              loadingText.style.fontSize = '16px';
+              loadingText.style.fontWeight = '500';
+              loadingText.style.textAlign = 'center';
+              loadingText.textContent = '正在加载验证...';
+              overlay.appendChild(loadingText);
+
+              document.body.appendChild(overlay);
+
+              // 🔥 关键：请确保替换为你自己的 Site Key！
+              const siteKey = '0x4AAAAAABzxmZ5cp7bwL3PZ';
+
+              // 渲染 Turnstile
+              window.turnstile.render('#turnstile-container', {
+                sitekey: siteKey,
+                callback: function(token) {
+                  // 成功验证
+                  setVerifiedCookie();
+                  overlay.remove();
+                  document.body.style.overflow = '';
+                  document.body.style.touchAction = '';
+                  console.log('✅ Turnstile verification successful!');
+                },
+
+                'error-callback': function(error) {
+                  console.error('❌ Turnstile Error:', error);
+
+                  // 移除加载文本
+                  const loadingTextEl = overlay.querySelector('div[style*="color"]'); 
+                  if (loadingTextEl) loadingTextEl.remove();
+
+                  // 根据不同错误类型显示不同提示
+                  let errorMessage = '';
+                  switch (error) {
+                    case 'timeout':
+                      errorMessage = '⏰ 验证超时，请刷新页面重试。';
+                      break;
+                    case 'bad-response':
+                      errorMessage = '🌐 网络异常或服务器响应错误，请检查网络后重试。';
+                      break;
+                    case 'invalid-site-key':
+                      errorMessage = '🔐 站点密钥无效，请联系管理员。';
+                      break;
+                    case 'failed':
+                    default:
+                      errorMessage = '🚫 验证失败，请尝试重新操作。如多次失败，请联系技术支持。';
+                  }
+
+                  // 显示错误信息
+                  const errorDiv = document.createElement('div');
+                  errorDiv.style.color = '#e74c3c';
+                  errorDiv.style.fontSize = '18px';
+                  errorDiv.style.fontWeight = '600';
+                  errorDiv.style.textAlign = 'center';
+                  errorDiv.style.marginTop = '16px';
+                  errorDiv.style.padding = '12px';
+                  errorDiv.style.border = '1px solid #e74c3c';
+                  errorDiv.style.borderRadius = '8px';
+                  errorDiv.style.backgroundColor = '#fdf2f2';
+                  errorDiv.textContent = errorMessage;
+
+                  overlay.appendChild(errorDiv);
+
+                  // 提供“重试”按钮
+                  const retryButton = document.createElement('button');
+                  retryButton.style.backgroundColor = '#3498db';
+                  retryButton.style.color = 'white';
+                  retryButton.style.border = 'none';
+                  retryButton.style.padding = '12px 24px';
+                  retryButton.style.borderRadius = '6px';
+                  retryButton.style.fontSize = '16px';
+                  retryButton.style.cursor = 'pointer';
+                  retryButton.style.marginTop = '20px';
+                  retryButton.textContent = '🔄 重试验证';
+
+                  retryButton.addEventListener('click', () => {
+                    overlay.removeChild(errorDiv);
+                    overlay.removeChild(retryButton);
+                    loadingText.textContent = '正在重新加载验证...';
+                    window.turnstile.reset(); // 重置组件
+                  });
+
+                  overlay.appendChild(retryButton);
+
+                  // ✅ 错误时也恢复滚动
+                  document.body.style.overflow = '';
+                  document.body.style.touchAction = '';
                 }
-
-// 创建一个覆盖全屏的遮罩层
-const overlay = document.createElement('div');
-overlay.id = 'turnstile-overlay';
-overlay.style.position = 'fixed';
-overlay.style.top = '0';
-overlay.style.left = '0';
-overlay.style.width = '100%';
-overlay.style.height = '100%';
-overlay.style.backgroundColor = 'rgba(128, 128, 128, 0.6)'; // 灰色半透明背景
-overlay.style.backdropFilter = 'blur(8px)'; // 高斯模糊效果
-overlay.style.zIndex = '99999';
-overlay.style.display = 'flex';
-overlay.style.justifyContent = 'center';
-overlay.style.alignItems = 'center';
-overlay.style.overflow = 'hidden'; // 防止内容溢出
-
-// ✅ 新增：禁用页面滚动
-document.body.style.overflow = 'hidden';
-document.body.style.touchAction = 'none'; // 禁用触摸滚动
-
-document.body.appendChild(overlay);
-
-// 创建一个容器来承载 Turnstile 组件
-const turnstileContainer = document.createElement('div');
-turnstileContainer.id = 'turnstile-container';
-// ✅ 新增：给容器添加缩放样式，让内部的 Turnstile 组件变大
-turnstileContainer.style.transform = 'scale(1.2)'; // 放大 1.2 倍
-turnstileContainer.style.transformOrigin = 'center'; // 以中心点缩放
-overlay.appendChild(turnstileContainer);
-
-// 渲染 Turnstile 组件
-window.turnstile.render('#turnstile-container', {
-  sitekey: siteKey,
-  callback: function(token) {
-    // 验证通过后，设置 Cookie 并移除遮罩层
-    setVerifiedCookie();
-    overlay.remove();
-    // ✅ 新增：恢复页面滚动
-    document.body.style.overflow = '';
-    document.body.style.touchAction = '';
+              });
+            }
+          `,
+        },
+      ],
+    };
   },
-  'error-callback': function(error) {
-    console.error('Turnstile Error:', error);
-    alert('验证失败，无效域，请刷新页面重试。');
-    // ✅ 新增：在错误时也恢复滚动，避免页面被永久锁定
-    document.body.style.overflow = '';
-    document.body.style.touchAction = '';
-  }
-});
-              }
-            `,
-          },
-        ],
-      };
-    },
-  }),
+}),
 
     // ✅ 新增：全局注入脚本，强制弹窗警告
     () => ({
