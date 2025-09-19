@@ -165,7 +165,7 @@ plugins: [
               loadingText.style.fontSize = '16px';
               loadingText.style.fontWeight = '500';
               loadingText.style.textAlign = 'center';
-              loadingText.textContent = '正在加载验证...';
+              loadingText.textContent = '正在验证您是否是真人。这可能需要几秒钟时间。';
               overlay.appendChild(loadingText);
 
               document.body.appendChild(overlay);
